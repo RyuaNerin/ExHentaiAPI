@@ -107,6 +107,9 @@ namespace ExHentaiAPI
 			if (aRes == null || aRes.m_parentId != ExHentai.KeyLogin)
 				throw new FormatException();
 
+			if (aRes.m_exception != null)
+				throw aRes.m_exception;
+
 			aRes.CompletedSynchronously = true;
 
 			this.ipbMemberId = rID.Match(aRes.m_body).Groups[1].Value;
@@ -191,6 +194,9 @@ namespace ExHentaiAPI
 			if (aRes == null || aRes.m_parentId != ExHentai.KeyGalleryToken)
 				throw new FormatException();
 
+			if (aRes.m_exception != null)
+				throw aRes.m_exception;
+
 			aRes.CompletedSynchronously = true;
 
 			return new GalleryTokenCollection(aRes.m_body);
@@ -265,6 +271,9 @@ namespace ExHentaiAPI
 			if (aRes == null || aRes.m_parentId != ExHentai.KeyGalleryInfo)
 				throw new FormatException();
 
+			if (aRes.m_exception != null)
+				throw aRes.m_exception;
+
 			aRes.CompletedSynchronously = true;
 
 			return new GalleryInfoCollection(aRes.m_body);
@@ -315,6 +324,9 @@ namespace ExHentaiAPI
 			ApiResult aRes = asyncResult as ApiResult;
 			if (aRes == null || aRes.m_parentId != ExHentai.KeyArchiveLink)
 				throw new FormatException();
+
+			if (aRes.m_exception != null)
+				throw aRes.m_exception;
 
 			aRes.CompletedSynchronously = true;
 
@@ -382,6 +394,9 @@ namespace ExHentaiAPI
 			if (aRes == null || aRes.m_parentId != ExHentai.KeyGalleryTokenFormURL)
 				throw new FormatException();
 
+			if (aRes.m_exception != null)
+				throw aRes.m_exception;
+
 			aRes.CompletedSynchronously = true;
 
 			JsonObject jo = (JsonObject)((JsonArray)((new JsonObject(aRes.m_body))["gmetadata"]))[0];
@@ -442,6 +457,9 @@ namespace ExHentaiAPI
 			if (aRes == null || aRes.m_parentId != ExHentai.KeyTorrentInfo)
 				throw new FormatException();
 
+			if (aRes.m_exception != null)
+				throw aRes.m_exception;
+
 			aRes.CompletedSynchronously = true;
 
 			GalleryToken token = aRes.m_userState as GalleryToken;
@@ -490,6 +508,9 @@ namespace ExHentaiAPI
 			ApiResult aRes = asyncResult as ApiResult;
 			if (aRes == null || aRes.m_parentId != ExHentai.KeyTorrentUrl)
 				throw new FormatException();
+
+			if (aRes.m_exception != null)
+				throw aRes.m_exception;
 
 			aRes.CompletedSynchronously = true;
 

@@ -72,14 +72,21 @@ namespace ExHentaiAPI
 			}
 			else
 			{
-				HttpWebResponse hwRes = this.m_req.EndGetResponse(asyncResult) as HttpWebResponse;
+				try
+				{
+					HttpWebResponse hwRes = this.m_req.EndGetResponse(asyncResult) as HttpWebResponse;
 
-				if (this.m_userState is bool)
-					this.m_body = hwRes.Headers.Get("set-cookie");
-				else
-					this.m_body = Helper.StringFromStream(hwRes.GetResponseStream());
+					if (this.m_userState is bool)
+						this.m_body = hwRes.Headers.Get("set-cookie");
+					else
+						this.m_body = Helper.StringFromStream(hwRes.GetResponseStream());
 
-				hwRes.Close();
+					hwRes.Close();
+				}
+				catch (Exception ex)
+				{
+					this.m_exception = ex;
+				}
 
 				this.IsCompleted = true;
 
@@ -97,6 +104,8 @@ namespace ExHentaiAPI
 		public object			m_userState;
 		public string			m_body;
 		public byte[]			m_buff;
+
+		public Exception		m_exception;
 
 		public bool			Cancel					{ get; set; }
 
