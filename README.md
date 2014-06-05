@@ -1,4 +1,4 @@
-# ExHentaiAPI 1.0.0
+# ExHentaiAPI 1.0.3.0
 * ExHentai API Library
 * Written by .Net Framework 3.5
 * CopyRight (C) 2014, RyuaNerin
