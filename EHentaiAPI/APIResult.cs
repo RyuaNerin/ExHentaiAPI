@@ -41,34 +41,66 @@ namespace ExHentaiAPI
 
 			this.m_buff = buff;
 
-			if (buff == null)
-				this.m_req.BeginGetResponse(this.ResponseCallback, null);
-			else
-				this.m_req.BeginGetRequestStream(this.RequestCallback, null);
+			try
+			{
+				if (buff == null)
+					this.m_req.BeginGetResponse(this.ResponseCallback, null);
+				else
+					this.m_req.BeginGetRequestStream(this.RequestCallback, null);
+			}
+			catch (Exception ex)
+			{
+				this.m_body = null;
+				this.Complete(ex);
+			}
 		}
 
 		~ApiResult()
 		{
 			this.m_manualEvent.Close();
 		}
+		
+		private void Complete()
+		{
+			this.Complete(null);
+		}
+		private void Complete(Exception ex)
+		{
+			this.m_exception = ex;
+
+			this.IsCompleted = true;
+
+			this.m_manualEvent.Set();
+
+			if (this.m_callback != null)
+				this.m_callback.Invoke(this);
+		}
 
 		private void RequestCallback(IAsyncResult asyncResult)
 		{
-			Stream stream = this.m_req.EndGetRequestStream(asyncResult);
-			stream.Write(this.m_buff, 0, this.m_buff.Length);
-			stream.Flush();
-			stream.Close();
+			try
+			{
+				Stream stream = this.m_req.EndGetRequestStream(asyncResult);
+				stream.Write(this.m_buff, 0, this.m_buff.Length);
+				stream.Flush();
+				stream.Close();
 
-			this.m_buff = null;
+				this.m_buff = null;
 
-			this.m_req.BeginGetResponse(this.ResponseCallback, null);
+				this.m_req.BeginGetResponse(this.ResponseCallback, null);
+			}
+			catch (Exception ex)
+			{
+				this.m_body = null;
+				this.Complete(ex);
+			}
 		}
 
 		private void ResponseCallback(IAsyncResult asyncResult)
 		{
 			if (this.Cancel)
 			{
-				this.m_manualEvent.Set();
+				this.Complete(null);
 			}
 			else
 			{
@@ -82,18 +114,15 @@ namespace ExHentaiAPI
 						this.m_body = Helper.StringFromStream(hwRes.GetResponseStream());
 
 					hwRes.Close();
+					
+					this.Complete(null);
 				}
 				catch (Exception ex)
 				{
-					this.m_exception = ex;
+					this.m_body = null;
+
+					this.Complete(ex);
 				}
-
-				this.IsCompleted = true;
-
-				this.m_manualEvent.Set();
-
-				if (this.m_callback != null)
-					this.m_callback.Invoke(this);
 			}
 		}
 
