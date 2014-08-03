@@ -11,8 +11,8 @@
 # [LICENSE](/LICENSE)
 * MIT LICENSE
 * *EXEMPTION CLAUSE*
- * *All caused by the usage of WARP is the responsibility of the user.*
- * *Code contributors WARP is not responsible for the use.*
+ * *All caused by the usage of ExHentaiAPI is the responsibility of the user.*
+ * *Code contributors ExHentaiAPI is not responsible for the use.*
 
 
 # CLASS
